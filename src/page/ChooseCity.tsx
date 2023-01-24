@@ -1,6 +1,5 @@
-import {SearchBar as Bar} from '@rneui/base'
-import {ListItem, makeStyles, Text, SearchBar} from '@rneui/themed'
-import React, {useState, useRef, useEffect} from 'react'
+import {Divider, ListItem, makeStyles, SearchBar, Text} from '@rneui/themed'
+import React, {useState} from 'react'
 import {TouchableOpacity, View} from 'react-native'
 import {SafeAreaView} from 'react-native-safe-area-context'
 
@@ -14,9 +13,7 @@ const mokCity = [
 
 const ChooseCity = () => {
   const [search, setSearch] = useState('')
-
   const styles = useStyle()
-
   const setCity = (text: string) => setSearch(text)
 
   return (
@@ -29,10 +26,12 @@ const ChooseCity = () => {
         platform="android"
         placeholder="Найти город"
       />
+      <Divider width={1} />
+
       <View style={styles.listContainer}>
         {mokCity.map((city, index) => (
           <TouchableOpacity key={index}>
-            <ListItem bottomDivider containerStyle={styles.listItemContainer}>
+            <ListItem>
               <ListItem.Content>
                 <ListItem.Title>
                   <Text style={styles.cityName}>
@@ -42,6 +41,7 @@ const ChooseCity = () => {
                 </ListItem.Title>
               </ListItem.Content>
             </ListItem>
+            <Divider width={1} />
           </TouchableOpacity>
         ))}
       </View>
@@ -54,13 +54,10 @@ export default ChooseCity
 const useStyle = makeStyles(theme => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.secondary,
+    backgroundColor: theme.colors.background,
   },
   listContainer: {
     marginVertical: 10,
-  },
-  listItemContainer: {
-    margin: 5,
   },
   boldText: {
     fontWeight: 'bold',

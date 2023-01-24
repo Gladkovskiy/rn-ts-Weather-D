@@ -3,14 +3,14 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack'
 import {useTheme} from '@rneui/themed'
 import React from 'react'
 import ChooseCity from '../page/ChooseCity'
-import ForecastOneDay from '../page/ForecastOneDay'
+import ForecastFiveDays from '../page/ForecastFiveDays'
 import Main from '../page/Main'
 import {ROUTES} from '../types/routes'
 import ButtonSearchCity from './MainScreen/ButtonSearchCity'
 
 export type RootStackParamList = {
   Main: undefined
-  ForecastOneDay: undefined
+  ForecastFiveDays: undefined
   ChooseCity: undefined
 }
 
@@ -40,9 +40,9 @@ const AppRouter = () => {
           options={{title: 'Выбор города'}}
         />
         <Stack.Screen
-          name={ROUTES.FORECAST_ONE_DAY}
-          component={ForecastOneDay}
-          options={{title: 'Прогноз погоды на день'}}
+          name={ROUTES.FORECAST_FIVE_DAYS}
+          component={ForecastFiveDays}
+          options={{title: 'Прогноз погоды на  5 дней'}}
         />
       </Stack.Navigator>
     </NavigationContainer>

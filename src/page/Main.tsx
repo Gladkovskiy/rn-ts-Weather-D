@@ -13,6 +13,7 @@ const mokData: ICurrentWeather = {
   weather: [{description: 'Солнечно', main: 'Sunny'}],
   wind: {speed: 0.55},
   visibility: 10000,
+  dt: 1661870592,
   sys: {sunrise: 1661834187, sunset: 1661882248},
 }
 
@@ -32,7 +33,7 @@ const Main = () => {
       <Button
         title={'Прогноз на 5 дней'}
         onPress={() => {
-          navigate(ROUTES.FORECAST_ONE_DAY)
+          navigate(ROUTES.FORECAST_FIVE_DAYS)
         }}
       />
     </SafeAreaView>

@@ -1,3 +1,4 @@
+//data for axios
 export interface ICurrentWeather {
   weather: {
     main: string
@@ -14,16 +15,46 @@ export interface ICurrentWeather {
   wind: {
     speed: number
   }
+  dt: number
   sys: {
     sunrise: number
     sunset: number
   }
 }
 
-interface Forecast5Days extends ICurrentWeather {
-  dt_txt: string
+export interface IForecast3Hours {
+  dt: number
+  main: {
+    temp: number
+    feels_like: number
+    humidity: number
+  }
+  weather: {
+    main: string
+    description: string
+    icon: string
+  }
+  wind: {
+    speed: number
+  }
+  pop: number
 }
 
 export interface IForecast5Days {
-  list: Forecast5Days[]
+  list: IForecast3Hours[]
+}
+
+//data for elments
+export interface IElementsForecast3Hour {
+  dt: number
+  temp: number
+  windSpeed: number
+  humidity: number
+  icon: string
+  pop: number
+}
+
+export interface IElementsForecast1Day {
+  date: string
+  list: IElementsForecast3Hour[]
 }

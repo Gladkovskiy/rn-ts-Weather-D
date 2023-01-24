@@ -23,6 +23,9 @@ export const theme = createTheme({
         fontSize: 18,
       },
     },
+    Divider: {
+      color: '#009A8F',
+    },
   },
   mode: 'light',
   lightColors: {

@@ -3,6 +3,7 @@ import Lottie from 'lottie-react-native'
 import React, {FC} from 'react'
 import {View} from 'react-native'
 import {ICurrentWeather} from '../../types/weatherTypes'
+import {dateToMonth} from '../../utils/date'
 import ControlledTooltip from '../ControlledTooltip'
 
 interface CurrentWeatherProps {
@@ -19,7 +20,7 @@ interface IWeatherParam {
 }
 
 const CurrentWeather: FC<CurrentWeatherProps> = ({
-  data: {main, weather, wind, visibility, sys},
+  data: {main, weather, wind, visibility, dt, sys},
 }) => {
   const styles = useStyle()
   const weatherParams: IWeatherParam[] = [
@@ -57,6 +58,8 @@ const CurrentWeather: FC<CurrentWeatherProps> = ({
 
   return (
     <View style={styles.container}>
+      <Text h2>{dateToMonth(dt)}</Text>
+
       <Lottie
         source={require('../../assets/lottie/sunny.json')}
         style={styles.weatherIcon}
