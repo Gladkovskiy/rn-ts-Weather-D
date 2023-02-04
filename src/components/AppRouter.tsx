@@ -7,6 +7,7 @@ import ForecastFiveDays from '../page/ForecastFiveDays'
 import Main from '../page/Main'
 import {ROUTES} from '../types/routes'
 import ButtonSearchCity from './MainScreen/ButtonSearchCity'
+import Title from './MainScreen/Title'
 
 export type RootStackParamList = {
   Main: undefined
@@ -24,14 +25,15 @@ const AppRouter = () => {
         screenOptions={{
           headerTintColor: 'white',
           headerStyle: {backgroundColor: theme.colors.primary},
-          headerTitleAlign: 'center',
+          headerTitleAlign: 'left',
         }}>
         <Stack.Screen
           name={ROUTES.MAIN}
           component={Main}
           options={{
-            title: 'Главный экран',
+            title: 'Weather-D',
             headerRight: () => <ButtonSearchCity />,
+            headerLeft: () => <Title />,
           }}
         />
         <Stack.Screen

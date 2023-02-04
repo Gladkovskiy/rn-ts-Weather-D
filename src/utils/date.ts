@@ -16,6 +16,7 @@ const arrMonth: {id: number; name: string}[] = [
 export const dateToMonth = (dt: number): string => {
   const localDate = new Date(dt).toLocaleDateString()
   const arr = localDate.split('.')
+
   return `${arr[0]} ${arrMonth[+arr[1] - 1].name}`
 }
 

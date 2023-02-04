@@ -1,50 +1,29 @@
-import {Divider, ListItem, makeStyles, SearchBar, Text} from '@rneui/themed'
-import React, {useState} from 'react'
-import {TouchableOpacity, View} from 'react-native'
+import Geolocation from '@react-native-community/geolocation'
+import {Button, makeStyles} from '@rneui/themed'
+import React from 'react'
 import {SafeAreaView} from 'react-native-safe-area-context'
-
-const mokCity = [
-  'Kramatorsk',
-  'Kramatorsk',
-  'Kramatorsk',
-  'Kramatorsk',
-  'Kramatorsk',
-]
+import SearchInput from '../components/ChooseCityScreen/SearchInput'
 
 const ChooseCity = () => {
-  const [search, setSearch] = useState('')
   const styles = useStyle()
-  const setCity = (text: string) => setSearch(text)
+
+  const getPosition = () => {
+    Geolocation.getCurrentPosition(
+      ({coords: {latitude, longitude}}) => {
+        console.log('lat:', latitude, 'long:', longitude)
+      },
+      ({message}) => {
+        console.log(message)
+      },
+      {timeout: 10000, maximumAge: 0, enableHighAccuracy: true},
+    )
+  }
 
   return (
     <SafeAreaView style={styles.container}>
-      <SearchBar
-        inputStyle={{color: 'white'}}
-        placeholderTextColor="white"
-        value={search}
-        onChangeText={setCity}
-        platform="android"
-        placeholder="Найти город"
-      />
-      <Divider width={1} />
+      <Button onPress={getPosition} title="Get current position" />
 
-      <View style={styles.listContainer}>
-        {mokCity.map((city, index) => (
-          <TouchableOpacity key={index}>
-            <ListItem>
-              <ListItem.Content>
-                <ListItem.Title>
-                  <Text style={styles.cityName}>
-                    <Text style={styles.boldText}>{search}</Text>
-                    {city.slice(search.length)}
-                  </Text>
-                </ListItem.Title>
-              </ListItem.Content>
-            </ListItem>
-            <Divider width={1} />
-          </TouchableOpacity>
-        ))}
-      </View>
+      <SearchInput />
     </SafeAreaView>
   )
 }
@@ -55,15 +34,5 @@ const useStyle = makeStyles(theme => ({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
-  },
-  listContainer: {
-    marginVertical: 10,
-  },
-  boldText: {
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  cityName: {
-    color: theme.colors.grey2,
   },
 }))

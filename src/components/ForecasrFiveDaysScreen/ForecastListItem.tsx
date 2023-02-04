@@ -4,7 +4,7 @@ import {View, ScrollView} from 'react-native'
 import {IElementsForecast1Day} from '../../types/weatherTypes'
 import {getHourAndMin, getSringMonth} from '../../utils/date'
 import {getImage} from '../../utils/getDynamicImage'
-import {arrImage} from './images'
+import {arrImage} from '../../assets/weatherIcons'
 
 const ForecastListItem: FC<IElementsForecast1Day> = ({list, date}) => {
   const styles = useStyle()

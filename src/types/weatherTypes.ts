@@ -3,7 +3,7 @@ export interface ICurrentWeather {
   weather: {
     main: string
     description: string
-    icon?: string
+    icon: string
   }[]
   main: {
     temp: number
@@ -20,6 +20,7 @@ export interface ICurrentWeather {
     sunrise: number
     sunset: number
   }
+  name: string
 }
 
 export interface IForecast3Hours {

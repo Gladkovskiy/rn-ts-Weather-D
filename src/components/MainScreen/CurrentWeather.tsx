@@ -1,10 +1,13 @@
 import {Icon, makeStyles, Text} from '@rneui/themed'
 import Lottie from 'lottie-react-native'
-import React, {FC} from 'react'
+import React, {FC, useMemo} from 'react'
 import {View} from 'react-native'
 import {ICurrentWeather} from '../../types/weatherTypes'
 import {dateToMonth} from '../../utils/date'
+import {getImage} from '../../utils/getDynamicImage'
 import ControlledTooltip from '../ControlledTooltip'
+import {arrImage} from '../../assets/lottie/weather_icons/index'
+import {arrImage as arrWeatherParams} from '../../assets/lottie/weather_params/index'
 
 interface CurrentWeatherProps {
   data: ICurrentWeather
@@ -13,80 +16,75 @@ interface CurrentWeatherProps {
 interface IWeatherParam {
   value: string
   toolTipText: string
-  icon: {
-    name: string
-    type: string
-  }
+  icon: string
+  speed?: number
 }
 
 const CurrentWeather: FC<CurrentWeatherProps> = ({
-  data: {main, weather, wind, visibility, dt, sys},
+  data: {main, weather, wind, visibility, name},
 }) => {
   const styles = useStyle()
-  const weatherParams: IWeatherParam[] = [
-    {
-      value: `${main.humidity} %`,
-      toolTipText: 'Влажность',
-      icon: {name: 'water', type: 'entypo'},
-    },
-    {
-      value: `${wind.speed} м/с`,
-      toolTipText: 'Скорость ветра',
-      icon: {name: 'wind', type: 'feather'},
-    },
-    {
-      value: `${main.pressure} мБар`,
-      toolTipText: 'Давление',
-      icon: {name: 'car-brake-low-pressure', type: 'material-community'},
-    },
-    {
-      value: `${visibility} м`,
-      toolTipText: 'Видимость',
-      icon: {name: 'visibility', type: 'material'},
-    },
-    {
-      value: new Date(sys.sunrise).toLocaleTimeString(),
-      toolTipText: 'Восход',
-      icon: {name: 'sunrise', type: 'feather'},
-    },
-    {
-      value: new Date(sys.sunset).toLocaleTimeString(),
-      toolTipText: 'Закат',
-      icon: {name: 'sunset', type: 'feather'},
-    },
-  ]
+  const weatherParams: IWeatherParam[] = useMemo(
+    () => [
+      {
+        value: `${main.humidity} %`,
+        toolTipText: 'Влажность',
+        icon: 'humidly',
+      },
+      {
+        value: `${Math.round(wind.speed)} м/с`,
+        toolTipText: 'Скорость ветра',
+        icon: 'wind',
+        speed: 0.6,
+      },
+      {
+        value: `${main.pressure} мБар`,
+        toolTipText: 'Давление',
+        icon: 'air-pressure',
+        speed: 1.3,
+      },
+      {
+        value: `${visibility} м`,
+        toolTipText: 'Видимость',
+        icon: 'visibility',
+        speed: 0.6,
+      },
+    ],
+    [main, visibility, wind],
+  )
 
   return (
     <View style={styles.container}>
-      <Text h2>{dateToMonth(dt)}</Text>
+      <Text h2>{name}</Text>
+      <Text h2>{dateToMonth(Date.now())}</Text>
 
       <Lottie
-        source={require('../../assets/lottie/sunny.json')}
+        source={getImage(weather[0].icon, arrImage)}
         style={styles.weatherIcon}
         autoPlay
         loop
       />
 
       <View style={styles.mainTemp}>
-        <Text h1>{main.temp} &#176;</Text>
+        <Text h1>{main.temp.toFixed(1)} &#176;</Text>
 
         <View style={{marginLeft: 10}}>
           <Text h4>{weather[0].description}</Text>
-          <Text h4>чувствуется как {main.feels_like} &#176;</Text>
+          <Text h4>чувствуется как {Math.round(main.feels_like)} &#176;</Text>
         </View>
       </View>
 
       <View style={styles.weatherParams}>
-        {weatherParams.map(({icon, toolTipText, value}) => (
+        {weatherParams.map(({icon, toolTipText, value, speed = 1}) => (
           <View style={styles.weatherParam} key={value}>
             <ControlledTooltip
               popover={<Text style={styles.whiteText}>{toolTipText}</Text>}>
-              <Icon
-                name={icon.name}
-                type={icon.type}
-                color={'white'}
-                size={30}
-                containerStyle={styles.icon}
+              <Lottie
+                source={getImage(icon, arrWeatherParams)}
+                style={{width: 50}}
+                autoPlay
+                loop
+                speed={speed}
               />
             </ControlledTooltip>
             <Text h3>{value}</Text>
