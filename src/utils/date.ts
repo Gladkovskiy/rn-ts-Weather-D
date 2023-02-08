@@ -15,9 +15,14 @@ const arrMonth: {id: number; name: string}[] = [
 
 export const dateToMonth = (dt: number): string => {
   const localDate = new Date(dt).toLocaleDateString()
-  const arr = localDate.split('.')
-
-  return `${arr[0]} ${arrMonth[+arr[1] - 1].name}`
+  let arr = ['']
+  if (localDate.match(/\//)) {
+    arr = localDate.split('/')
+    return `${arr[1]} ${arrMonth[+arr[0] - 1].name}`
+  } else {
+    arr = localDate.split('.')
+    return `${arr[0]} ${arrMonth[+arr[1] - 1].name}`
+  }
 }
 
 export const getHourAndMin = (dt: number): string => {
@@ -31,4 +36,11 @@ export const getSringMonth = (dt: string) => {
   const arr = dt.split('.')
   const found = arrMonth.find(item => item.id === +arr[1])
   return `${arr[0]} ${found?.name}`
+}
+
+export const getHourAndMinute = (dt: number) => {
+  const arr = new Date(dt).toLocaleTimeString().split(':')
+  arr.pop()
+
+  return arr.join(':')
 }

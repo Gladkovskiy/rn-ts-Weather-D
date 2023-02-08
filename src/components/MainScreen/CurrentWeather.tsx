@@ -1,16 +1,18 @@
-import {Icon, makeStyles, Text} from '@rneui/themed'
+import {Button, Icon, makeStyles, Text} from '@rneui/themed'
 import Lottie from 'lottie-react-native'
 import React, {FC, useMemo} from 'react'
 import {View} from 'react-native'
-import {ICurrentWeather} from '../../types/weatherTypes'
-import {dateToMonth} from '../../utils/date'
-import {getImage} from '../../utils/getDynamicImage'
-import ControlledTooltip from '../ControlledTooltip'
 import {arrImage} from '../../assets/lottie/weather_icons/index'
 import {arrImage as arrWeatherParams} from '../../assets/lottie/weather_params/index'
+import {ICurrentWeather} from '../../types/weatherTypes'
+import {dateToMonth, getHourAndMin} from '../../utils/date'
+import {getImage} from '../../utils/getDynamicImage'
+import ControlledTooltip from '../ControlledTooltip'
 
 interface CurrentWeatherProps {
   data: ICurrentWeather
+  isLoading: boolean
+  refetch: () => void
 }
 
 interface IWeatherParam {
@@ -22,6 +24,8 @@ interface IWeatherParam {
 
 const CurrentWeather: FC<CurrentWeatherProps> = ({
   data: {main, weather, wind, visibility, name},
+  isLoading,
+  refetch,
 }) => {
   const styles = useStyle()
   const weatherParams: IWeatherParam[] = useMemo(
@@ -56,7 +60,20 @@ const CurrentWeather: FC<CurrentWeatherProps> = ({
   return (
     <View style={styles.container}>
       <Text h2>{name}</Text>
-      <Text h2>{dateToMonth(Date.now())}</Text>
+      <Text h3>{dateToMonth(Date.now())}</Text>
+
+      <View style={styles.timeContainer}>
+        <Text h3 style={styles.weatherTime}>
+          {getHourAndMin(Date.now())}
+        </Text>
+        <Button
+          buttonStyle={styles.refreshButton}
+          color="primary"
+          onPress={refetch}
+          loading={isLoading}>
+          <Icon type="font-awesome" name="refresh" color="white" size={20} />
+        </Button>
+      </View>
 
       <Lottie
         source={getImage(weather[0].icon, arrImage)}
@@ -129,5 +146,15 @@ const useStyle = makeStyles(theme => ({
   },
   whiteText: {
     color: theme.colors.white,
+  },
+  refreshButton: {
+    borderRadius: 20,
+  },
+  weatherTime: {
+    marginRight: 10,
+  },
+  timeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 }))

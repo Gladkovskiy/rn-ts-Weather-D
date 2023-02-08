@@ -1,5 +1,6 @@
 import {useQuery} from '@tanstack/react-query'
 import {ILocation} from '../../types/googlePlaceApi'
+import {forecastWeather} from '../../utils/sortArray'
 import {getCurrentWeather, getForecast} from '../api/weatherApi'
 
 export const useCurrentWeather = (data: ILocation) => {
@@ -14,7 +15,7 @@ export const useCurrentWeather = (data: ILocation) => {
 
 export const useForecast = (data: ILocation) => {
   const query = useQuery(['forecast', data], () => getForecast(data), {
-    enabled: false,
+    select: forecast => forecastWeather(forecast),
   })
 
   return query

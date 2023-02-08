@@ -7,8 +7,8 @@ export const minMaxTemp = (
   const arr = [...list]
   arr.sort((a, b) => (a.temp > b.temp ? 1 : -1))
   if (option === 'min') {
-    return `${arr[0].temp}`
+    return `${Math.round(arr[0].temp)}`
   } else {
-    return `${arr[arr.length - 1].temp}`
+    return `${Math.round(arr[arr.length - 1].temp)}`
   }
 }

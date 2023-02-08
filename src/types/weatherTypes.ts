@@ -24,7 +24,6 @@ export interface ICurrentWeather {
 }
 
 export interface IForecast3Hours {
-  dt: number
   main: {
     temp: number
     feels_like: number
@@ -34,11 +33,12 @@ export interface IForecast3Hours {
     main: string
     description: string
     icon: string
-  }
+  }[]
   wind: {
     speed: number
   }
   pop: number
+  dt_txt: string
 }
 
 export interface IForecast5Days {
@@ -47,7 +47,7 @@ export interface IForecast5Days {
 
 //data for elments
 export interface IElementsForecast3Hour {
-  dt: number
+  dt: string
   temp: number
   windSpeed: number
   humidity: number
