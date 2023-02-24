@@ -2,50 +2,44 @@ import {Input} from '@rneui/base'
 import {Icon, makeStyles, useTheme} from '@rneui/themed'
 import React, {createRef, FC, useEffect, useState} from 'react'
 import {ActivityIndicator, Pressable, TextInput, View} from 'react-native'
-import {useAutocomplete} from '../../http/query/useGeocoding'
-import {IPredict} from '../../types/googlePlaceApi'
+import {useAutocomplete, useGeocoding} from '../../http/query/useGeocoding'
 import SearchList from './SearchList'
 
 interface IStyles {
   focus: boolean | undefined
 }
 
-const mokPrediction: IPredict[] = [
-  {
-    description: 'Краматорск, Донецкая область, Украина',
-  },
-  {
-    description: 'Крамарка, Днепропетровская область, Украина',
-  },
-  {
-    description: 'Крамаренки, Полтавская область, Украина',
-  },
-]
-
 const SearchInput: FC = () => {
   const [focus, setFocus] = useState(false)
-  const [value, setValue] = useState('')
+  const [searchCity, setSearchCity] = useState('')
+  const [cityName, setCityName] = useState('')
+
   const ref = createRef<Input & TextInput>()
-  const autocompleteApi = useAutocomplete(value)
   const styles = useStyles({focus})
   const {
     theme: {colors},
   } = useTheme()
 
+  const autocompleteApi = useAutocomplete(searchCity)
+  const geocodingApi = useGeocoding(cityName)
+
   useEffect(() => {
-    if (value.length > 3) {
+    if (searchCity.length > 3) {
       autocompleteApi.refetch()
-      console.log('fetch')
     }
-  }, [value])
+  }, [searchCity])
+
+  useEffect(() => {
+    if (cityName) geocodingApi.refetch()
+  }, [cityName])
 
   return (
     <View style={styles.container} onTouchStart={() => ref.current?.blur()}>
       <View>
         <Input
           ref={ref}
-          value={value}
-          onChangeText={text => setValue(text)}
+          value={searchCity}
+          onChangeText={text => setSearchCity(text)}
           onFocus={() => setFocus(true)}
           onBlur={() => setFocus(false)}
           maxLength={20}
@@ -62,12 +56,12 @@ const SearchInput: FC = () => {
           placeholderTextColor={focus ? colors.white : colors.grey3}
         />
 
-        {value.length > 0 && (
+        {searchCity.length > 0 && (
           <Pressable
             style={styles.cancelSearch}
-            onTouchStart={e => {
+            onTouchEnd={e => {
               e.stopPropagation()
-              setValue('')
+              setSearchCity('')
             }}>
             <Icon
               type="material"
@@ -77,19 +71,16 @@ const SearchInput: FC = () => {
           </Pressable>
         )}
 
-        {/* добавить loading в animation */}
         <ActivityIndicator
           size="small"
           style={styles.loading}
           animating={autocompleteApi.isFetching}
+          color={colors.white}
         />
       </View>
 
       {autocompleteApi.data && (
-        <SearchList
-          predictions={autocompleteApi.data}
-          func={cityName => console.log(cityName)}
-        />
+        <SearchList predictions={autocompleteApi.data} func={setCityName} />
       )}
     </View>
   )
@@ -116,5 +107,6 @@ const useStyles = makeStyles(({colors}, props: IStyles) => ({
     position: 'absolute',
     top: '21%',
     left: '85%',
+    color: colors.white,
   },
 }))

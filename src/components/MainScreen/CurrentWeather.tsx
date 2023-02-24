@@ -1,18 +1,19 @@
-import {Button, Icon, makeStyles, Text} from '@rneui/themed'
+import {makeStyles, Text} from '@rneui/themed'
 import Lottie from 'lottie-react-native'
-import React, {FC, useMemo} from 'react'
+import React, {FC, useContext, useMemo} from 'react'
 import {View} from 'react-native'
 import {arrImage} from '../../assets/lottie/weather_icons/index'
 import {arrImage as arrWeatherParams} from '../../assets/lottie/weather_params/index'
 import {ICurrentWeather} from '../../types/weatherTypes'
-import {dateToMonth, getHourAndMin} from '../../utils/date'
+import {dateToMonth, getHourAndMin, getNameOfDay} from '../../utils/date'
 import {getImage} from '../../utils/getDynamicImage'
 import ControlledTooltip from '../ControlledTooltip'
+import {GlobalContext} from '../GlobalContextProvider'
+import RefreshButton from '../RefreshButton'
 
 interface CurrentWeatherProps {
   data: ICurrentWeather
   isLoading: boolean
-  refetch: () => void
 }
 
 interface IWeatherParam {
@@ -25,9 +26,9 @@ interface IWeatherParam {
 const CurrentWeather: FC<CurrentWeatherProps> = ({
   data: {main, weather, wind, visibility, name},
   isLoading,
-  refetch,
 }) => {
   const styles = useStyle()
+  const {cityName} = useContext(GlobalContext)
   const weatherParams: IWeatherParam[] = useMemo(
     () => [
       {
@@ -59,20 +60,15 @@ const CurrentWeather: FC<CurrentWeatherProps> = ({
 
   return (
     <View style={styles.container}>
-      <Text h2>{name}</Text>
-      <Text h3>{dateToMonth(Date.now())}</Text>
+      <Text h2>{cityName || name}</Text>
+      <Text h3>{`${getNameOfDay()}, ${dateToMonth()}`}</Text>
 
       <View style={styles.timeContainer}>
         <Text h3 style={styles.weatherTime}>
-          {getHourAndMin(Date.now())}
+          {getHourAndMin()}
         </Text>
-        <Button
-          buttonStyle={styles.refreshButton}
-          color="primary"
-          onPress={refetch}
-          loading={isLoading}>
-          <Icon type="font-awesome" name="refresh" color="white" size={20} />
-        </Button>
+
+        <RefreshButton isLoading={isLoading} timeoutRefresh={30000} />
       </View>
 
       <Lottie
@@ -83,11 +79,11 @@ const CurrentWeather: FC<CurrentWeatherProps> = ({
       />
 
       <View style={styles.mainTemp}>
-        <Text h1>{main.temp.toFixed(1)} &#176;</Text>
+        <Text h1>{main.temp.toFixed(0)} &#176;</Text>
 
-        <View style={{marginLeft: 10}}>
+        <View style={styles.describeWeather}>
           <Text h4>{weather[0].description}</Text>
-          <Text h4>чувствуется как {Math.round(main.feels_like)} &#176;</Text>
+          <Text h4>ощущается как {Math.round(main.feels_like)} &#176;</Text>
         </View>
       </View>
 
@@ -116,7 +112,6 @@ export default CurrentWeather
 
 const useStyle = makeStyles(theme => ({
   weatherIcon: {
-    height: 200,
     width: 200,
   },
   container: {
@@ -128,18 +123,17 @@ const useStyle = makeStyles(theme => ({
     alignItems: 'center',
   },
   weatherParams: {
-    marginVertical: 20,
-    padding: 10,
+    flex: 1,
+    marginTop: 20,
     flexDirection: 'row',
     flexWrap: 'wrap',
+    alignContent: 'center',
   },
   weatherParam: {
-    marginVertical: 5,
     flexDirection: 'row',
-    flex: 1,
     flexBasis: '50%',
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   icon: {
     width: 40,
@@ -156,5 +150,9 @@ const useStyle = makeStyles(theme => ({
   timeContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    height: 50,
+  },
+  describeWeather: {
+    marginLeft: 10,
   },
 }))

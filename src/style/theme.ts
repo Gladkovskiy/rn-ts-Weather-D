@@ -32,5 +32,6 @@ export const theme = createTheme({
     primary: '#14CE00',
     secondary: '#009A8F',
     background: '#A2EB00',
+    disabled: '#83D350',
   },
 })

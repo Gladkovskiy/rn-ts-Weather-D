@@ -6,14 +6,22 @@ import ForecastListItem_1 from './ForecastListItem_1'
 
 interface ITabViewWeather {
   forecast: IElementsForecast1Day[]
-  index: number
+  tabNumber: number
+  changeTabNumber: (index: number) => void
 }
 
-const TabViewWeather: FC<ITabViewWeather> = ({forecast, index}) => {
+const TabViewWeather: FC<ITabViewWeather> = ({
+  forecast,
+  tabNumber,
+  changeTabNumber,
+}) => {
   const styles = useStyle()
 
   return (
-    <TabView value={index} animationType="spring" disableSwipe>
+    <TabView
+      value={tabNumber}
+      onChange={index => changeTabNumber(index)}
+      animationType="spring">
       {forecast.map(item => (
         <TabView.Item key={item.date} style={styles.tabContainer}>
           <ForecastListItem_1 {...item} />

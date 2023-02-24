@@ -7,4 +7,8 @@ export const arrImage: IImage[] = [
 
   {name: 'visibility', image: require('./visibility.json')},
   {name: 'wind', image: require('./wind.json')},
+  {name: 'temperature', image: require('./temperature.json')},
+  {name: 'weather', image: require('./weather.json')},
+  {name: 'time', image: require('./time.json')},
+  {name: 'weather-change', image: require('./weather-change.json')},
 ]

@@ -1,6 +1,7 @@
 import {makeStyles, Tab, Text} from '@rneui/themed'
 import React, {FC} from 'react'
 import {IElementsForecast1Day} from '../../types/weatherTypes'
+import {getShortNameOfDate} from '../../utils/date'
 import {minMaxTemp} from '../../utils/Temperature'
 
 interface ITabItem {
@@ -17,6 +18,7 @@ const TabItem: FC<ITabItem> = ({forecast, index, setIndex}) => {
       {forecast.map(({date, list}) => (
         <Tab.Item key={date}>
           {date}
+          {getShortNameOfDate(date)}
           <Text style={styles.minMax}>{minMaxTemp(list, 'min')}&#176;</Text>
           <Text style={styles.minMax}>{minMaxTemp(list, 'max')}&#176;</Text>
         </Tab.Item>

@@ -9,6 +9,7 @@ import {Colors} from 'react-native/Libraries/NewAppScreen'
 import AppRouter from './src/components/AppRouter'
 import {GlobalContext} from './src/components/GlobalContextProvider'
 import {theme} from './src/style/theme'
+import SplashScreen from 'react-native-splash-screen'
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark'
@@ -19,10 +20,13 @@ const App = () => {
   }
 
   useEffect(() => {
+    SplashScreen.hide()
+
     request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then(result => {
       if (result === 'granted' || result === 'limited')
         setLocationPermission(true)
     })
+
     Geolocation.setRNConfiguration({skipPermissionRequests: false})
   }, [])
 

@@ -1,17 +1,16 @@
 import {makeStyles} from '@rneui/themed'
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
 import {SafeAreaView} from 'react-native-safe-area-context'
 import TabItem from '../components/ForecasrFiveDaysScreen/TabItem'
 import TabViewWeather from '../components/ForecasrFiveDaysScreen/TabViewWeather'
+import {GlobalContext} from '../components/GlobalContextProvider'
 import Loading from '../components/Loading'
 import {useForecast} from '../http/query/useWeather'
 
 const ForecastFiveDays = () => {
   const [tabIndex, setTabIndex] = useState(0)
-  const {data, isSuccess} = useForecast({
-    lat: 48.8532,
-    lng: 37.6053,
-  })
+  const {coordinates} = useContext(GlobalContext)
+  const {data, isSuccess} = useForecast(coordinates)
   const styles = useStyle()
 
   return (
@@ -19,7 +18,11 @@ const ForecastFiveDays = () => {
       {isSuccess ? (
         <>
           <TabItem forecast={data} index={tabIndex} setIndex={setTabIndex} />
-          <TabViewWeather forecast={data} index={tabIndex} />
+          <TabViewWeather
+            forecast={data}
+            tabNumber={tabIndex}
+            changeTabNumber={setTabIndex}
+          />
         </>
       ) : (
         <Loading />

@@ -1,16 +1,13 @@
+import {Image, makeStyles} from '@rneui/themed'
 import React, {FC} from 'react'
-import Lottie from 'lottie-react-native'
-import {makeStyles} from '@rneui/themed'
 
 const Title: FC = () => {
   const styles = useStyle()
 
   return (
-    <Lottie
-      source={require('../../assets/lottie/title.json')}
-      autoPlay
-      loop
-      style={styles.lottie}
+    <Image
+      source={require('../../assets/weather-app.png')}
+      style={styles.image}
     />
   )
 }
@@ -18,7 +15,9 @@ const Title: FC = () => {
 export default Title
 
 const useStyle = makeStyles(() => ({
-  lottie: {
-    width: 80,
+  image: {
+    width: 50,
+    height: 50,
+    marginRight: 15,
   },
 }))

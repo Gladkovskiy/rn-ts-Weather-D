@@ -1,8 +1,10 @@
 import {useNavigation} from '@react-navigation/native'
 import {Button, makeStyles} from '@rneui/themed'
-import {useQueryClient} from '@tanstack/react-query'
-import React from 'react'
+import React, {useContext} from 'react'
 import {SafeAreaView} from 'react-native-safe-area-context'
+import Error from '../components/Error'
+import {GlobalContext} from '../components/GlobalContextProvider'
+import InfoApp from '../components/InfoApp'
 import Loading from '../components/Loading'
 import CurrentWeather from '../components/MainScreen/CurrentWeather'
 import {useCurrentWeather} from '../http/query/useWeather'
@@ -11,29 +13,18 @@ import {ROUTES} from '../types/routes'
 
 const Main = () => {
   const styles = useStyle()
-  const {data, isSuccess, isFetching} = useCurrentWeather({
-    lat: 48.8532,
-    lng: 37.6053,
-  })
+  const {coordinates} = useContext(GlobalContext)
+  const {data, isSuccess, isFetching, isError} = useCurrentWeather(coordinates)
   const {navigate} = useNavigation<NavigationProps>()
-  const queryClient = useQueryClient()
-
-  const updateWeather = () => {
-    queryClient.invalidateQueries([
-      'currentWeather',
-      {lat: 48.8532, lng: 37.6053},
-    ])
-  }
 
   return (
     <SafeAreaView style={styles.container}>
       {isSuccess ? (
         <>
-          <CurrentWeather
-            data={data}
-            isLoading={isFetching}
-            refetch={updateWeather}
-          />
+          <CurrentWeather data={data} isLoading={isFetching} />
+
+          <InfoApp />
+
           <Button
             title={'Прогноз на 5 дней'}
             onPress={() => {
@@ -41,8 +32,10 @@ const Main = () => {
             }}
           />
         </>
-      ) : (
+      ) : !isError ? (
         <Loading />
+      ) : (
+        <Error isLoading={isFetching} />
       )}
     </SafeAreaView>
   )

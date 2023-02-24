@@ -3,15 +3,40 @@ import Lottie from 'lottie-react-native'
 import React, {FC} from 'react'
 import {View} from 'react-native'
 import {arrImage} from '../../assets/lottie/weather_icons/index'
-
+import {arrImage as arrImageParams} from '../../assets/lottie/weather_params/index'
 import {IElementsForecast1Day} from '../../types/weatherTypes'
 import {getImage} from '../../utils/getDynamicImage'
+
+const arrParamsDescription = [
+  'time',
+  '',
+  'temperature',
+  'wind',
+  'humidly',
+  'weather',
+]
 
 const ForecastListItem_1: FC<IElementsForecast1Day> = ({list}) => {
   const styles = useStyle()
 
   return (
     <View style={styles.container}>
+      <View style={styles.paramsContainer}>
+        {arrParamsDescription.map(description => (
+          <View style={styles.flex} key={description}>
+            {description && (
+              <Lottie
+                source={getImage(description, arrImageParams)}
+                style={styles.lottieParams}
+                speed={0.7}
+                autoPlay
+                loop
+              />
+            )}
+          </View>
+        ))}
+      </View>
+
       {list.map(({dt, temp, icon, humidity, pop, windSpeed}, index) => (
         <View
           key={dt}
@@ -33,7 +58,7 @@ const ForecastListItem_1: FC<IElementsForecast1Day> = ({list}) => {
           </View>
 
           <View style={styles.flex}>
-            <Text h3>{temp} &deg;</Text>
+            <Text h3>{Math.round(temp)} &deg;</Text>
           </View>
 
           <View style={styles.flex}>
@@ -45,7 +70,7 @@ const ForecastListItem_1: FC<IElementsForecast1Day> = ({list}) => {
           </View>
 
           <View style={styles.flex}>
-            <Text h3>{pop * 100} %</Text>
+            <Text h3>{Math.round(pop * 100)} %</Text>
           </View>
         </View>
       ))}
@@ -62,15 +87,25 @@ const useStyle = makeStyles(({colors}) => ({
   lineContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: '12.5%',
+    height: '11.5%',
+  },
+  paramsContainer: {
+    flexDirection: 'row',
+    borderBottomWidth: 0.8,
+    borderColor: colors.secondary,
+    height: '8%',
   },
   lottie: {
     width: 50,
+  },
+  lottieParams: {
+    width: 40,
   },
   flex: {
     flex: 1,
     flexShrink: 1,
     alignItems: 'center',
+    justifyContent: 'center',
     flexBasis: '16.7%',
   },
   secondBg: {
