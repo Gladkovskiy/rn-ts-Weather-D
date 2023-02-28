@@ -18,6 +18,7 @@ export interface IMainScreen {
   m_s: string
   mBar: string
   m: string
+  errorEnternet: string
 }
 
 export interface ISearchScreen {

@@ -18,6 +18,7 @@ const translation: IMainScreen = {
   m: 'm',
   m_s: 'm/s',
   mBar: 'mBar',
+  errorEnternet: 'Check the Internet connection',
 }
 
 export default translation
