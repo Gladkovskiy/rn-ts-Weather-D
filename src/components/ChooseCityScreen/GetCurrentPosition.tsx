@@ -38,7 +38,7 @@ const GetCurrentPosition: FC = () => {
       },
       ({message, code}) => {
         if (code === 2) {
-          setError({visible: true, message: 'Включите определение локации'})
+          setError({visible: true, message: t('locationError')})
         } else {
           setError({visible: true, message})
         }
