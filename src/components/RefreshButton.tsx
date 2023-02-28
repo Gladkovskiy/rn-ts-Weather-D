@@ -1,6 +1,7 @@
 import {Button, Icon, makeStyles} from '@rneui/themed'
 import {useQueryClient} from '@tanstack/react-query'
 import React, {FC, useContext, useState} from 'react'
+import {useTranslation} from 'react-i18next'
 import {GlobalContext} from './GlobalContextProvider'
 
 interface IRefreshButton {
@@ -13,9 +14,12 @@ const RefreshButton: FC<IRefreshButton> = ({isLoading, timeoutRefresh = 0}) => {
   const [refreshActive, setRefreshActive] = useState(false)
   const {coordinates} = useContext(GlobalContext)
   const queryClient = useQueryClient()
+  const {
+    i18n: {language},
+  } = useTranslation()
 
   const update = () => {
-    queryClient.invalidateQueries(['currentWeather', coordinates])
+    queryClient.invalidateQueries(['currentWeather', coordinates, language])
     setRefreshActive(true)
     setTimeout(() => {
       setRefreshActive(false)

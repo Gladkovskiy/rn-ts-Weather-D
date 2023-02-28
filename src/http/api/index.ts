@@ -27,3 +27,12 @@ export enum GooglePath {
   AUTOCOMPLETE = '/autocomplete/json',
   GEOCODING = '/findplacefromtext/json',
 }
+
+export const $getCityNameHost = axios.create({
+  baseURL: 'https://maps.googleapis.com/maps/api/geocode/json',
+  params: {
+    key: GOOGLE_API_KEY,
+    language: 'ru',
+    result_type: 'locality',
+  },
+})

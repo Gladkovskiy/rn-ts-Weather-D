@@ -1,9 +1,11 @@
 import {makeStyles, Text} from '@rneui/themed'
 import Lottie from 'lottie-react-native'
 import React, {FC} from 'react'
+import {useTranslation} from 'react-i18next'
 import {View} from 'react-native'
 import {arrImage} from '../../assets/lottie/weather_icons/index'
 import {arrImage as arrImageParams} from '../../assets/lottie/weather_params/index'
+import {forecastScreenKeys, Screens} from '../../languages/types'
 import {IElementsForecast1Day} from '../../types/weatherTypes'
 import {getImage} from '../../utils/getDynamicImage'
 
@@ -18,6 +20,9 @@ const arrParamsDescription = [
 
 const ForecastListItem_1: FC<IElementsForecast1Day> = ({list}) => {
   const styles = useStyle()
+
+  const {t: t1} = useTranslation<Screens>('forecastScreen')
+  const t = t1<forecastScreenKeys>
 
   return (
     <View style={styles.container}>
@@ -62,7 +67,9 @@ const ForecastListItem_1: FC<IElementsForecast1Day> = ({list}) => {
           </View>
 
           <View style={styles.flex}>
-            <Text h3>{Math.round(windSpeed)} м/c</Text>
+            <Text h3>
+              {Math.round(windSpeed)} {t('m_s')}
+            </Text>
           </View>
 
           <View style={styles.flex}>

@@ -1,8 +1,10 @@
 import {Input} from '@rneui/base'
 import {Icon, makeStyles, useTheme} from '@rneui/themed'
 import React, {createRef, FC, useEffect, useState} from 'react'
+import {useTranslation} from 'react-i18next'
 import {ActivityIndicator, Pressable, TextInput, View} from 'react-native'
 import {useAutocomplete, useGeocoding} from '../../http/query/useGeocoding'
+import {Screens, searchScreenKeys} from '../../languages/types'
 import SearchList from './SearchList'
 
 interface IStyles {
@@ -20,8 +22,15 @@ const SearchInput: FC = () => {
     theme: {colors},
   } = useTheme()
 
-  const autocompleteApi = useAutocomplete(searchCity)
+  const {
+    i18n: {language},
+  } = useTranslation()
+
+  const autocompleteApi = useAutocomplete(searchCity, language)
   const geocodingApi = useGeocoding(cityName)
+
+  const {t: t1} = useTranslation<Screens>('searchScreen')
+  const t = t1<searchScreenKeys>
 
   useEffect(() => {
     if (searchCity.length > 3) {
@@ -43,7 +52,7 @@ const SearchInput: FC = () => {
           onFocus={() => setFocus(true)}
           onBlur={() => setFocus(false)}
           maxLength={20}
-          placeholder="Название города"
+          placeholder={t('placeholderSearchInput')}
           leftIcon={
             <Icon
               type="material"

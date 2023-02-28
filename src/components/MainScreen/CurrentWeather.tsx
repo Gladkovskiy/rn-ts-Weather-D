@@ -1,9 +1,11 @@
 import {makeStyles, Text} from '@rneui/themed'
 import Lottie from 'lottie-react-native'
 import React, {FC, useContext, useMemo} from 'react'
+import {useTranslation} from 'react-i18next'
 import {View} from 'react-native'
 import {arrImage} from '../../assets/lottie/weather_icons/index'
 import {arrImage as arrWeatherParams} from '../../assets/lottie/weather_params/index'
+import {mainScreenKeys, Screens} from '../../languages/types'
 import {ICurrentWeather} from '../../types/weatherTypes'
 import {dateToMonth, getHourAndMin, getNameOfDay} from '../../utils/date'
 import {getImage} from '../../utils/getDynamicImage'
@@ -29,39 +31,46 @@ const CurrentWeather: FC<CurrentWeatherProps> = ({
 }) => {
   const styles = useStyle()
   const {cityName} = useContext(GlobalContext)
+
+  const {
+    t,
+    i18n: {language},
+  } = useTranslation<Screens>('mainScreen')
+  const translate = t<mainScreenKeys>
+
   const weatherParams: IWeatherParam[] = useMemo(
     () => [
       {
         value: `${main.humidity} %`,
-        toolTipText: 'Влажность',
+        toolTipText: translate('humidity'),
         icon: 'humidly',
       },
       {
-        value: `${Math.round(wind.speed)} м/с`,
-        toolTipText: 'Скорость ветра',
+        value: `${Math.round(wind.speed)} ${translate('m_s')}`,
+        toolTipText: translate('wind'),
         icon: 'wind',
         speed: 0.6,
       },
       {
-        value: `${main.pressure} мБар`,
-        toolTipText: 'Давление',
+        value: `${main.pressure} ${translate('mBar')}`,
+        toolTipText: translate('pressure'),
         icon: 'air-pressure',
         speed: 1.3,
       },
       {
-        value: `${visibility} м`,
-        toolTipText: 'Видимость',
+        value: `${visibility} ${translate('m')}`,
+        toolTipText: translate('visibility'),
         icon: 'visibility',
         speed: 0.6,
       },
     ],
-    [main, visibility, wind],
+    [main, visibility, wind, language],
   )
 
   return (
     <View style={styles.container}>
       <Text h2>{cityName || name}</Text>
-      <Text h3>{`${getNameOfDay()}, ${dateToMonth()}`}</Text>
+      <Text h3>{`${getNameOfDay(language)}, ${dateToMonth(language)}`}</Text>
 
       <View style={styles.timeContainer}>
         <Text h3 style={styles.weatherTime}>
@@ -83,7 +92,9 @@ const CurrentWeather: FC<CurrentWeatherProps> = ({
 
         <View style={styles.describeWeather}>
           <Text h4>{weather[0].description}</Text>
-          <Text h4>ощущается как {Math.round(main.feels_like)} &#176;</Text>
+          <Text h4>
+            {t('feelsLike')} {Math.round(main.feels_like)} &#176;
+          </Text>
         </View>
       </View>
 

@@ -3,10 +3,10 @@ import {ILocation} from '../../types/googlePlaceApi'
 import {forecastWeather} from '../../utils/sortArray'
 import {getCurrentWeather, getForecast} from '../api/weatherApi'
 
-export const useCurrentWeather = (data: ILocation) => {
+export const useCurrentWeather = (data: ILocation, lang: string) => {
   const query = useQuery(
-    ['currentWeather', data],
-    () => getCurrentWeather(data),
+    ['currentWeather', data, lang],
+    () => getCurrentWeather(data, lang),
     {},
   )
 

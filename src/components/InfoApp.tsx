@@ -1,6 +1,8 @@
 import {Dialog, Icon, makeStyles, Text, useTheme} from '@rneui/themed'
 import React, {FC, useState} from 'react'
+import {useTranslation} from 'react-i18next'
 import {TouchableOpacity, View, Linking} from 'react-native'
+import {AppInfo, mainScreenKeys, Screens} from '../languages/types'
 
 const InfoApp: FC = () => {
   const {
@@ -8,6 +10,11 @@ const InfoApp: FC = () => {
   } = useTheme()
   const styles = useStyle()
   const [visible, setVisible] = useState(false)
+
+  const {t} = useTranslation<Screens, mainScreenKeys>('mainScreen', {
+    keyPrefix: 'appInfo',
+  })
+  const translate = t<AppInfo>
 
   const createLink = async (reference: string) => {
     await Linking.openURL(reference)
@@ -29,7 +36,7 @@ const InfoApp: FC = () => {
           <TouchableOpacity
             onPress={() => createLink('https://github.com/Gladkovskiy')}>
             <Text style={styles.text}>
-              Разработано:{'  '}
+              {translate('developed')}:{'  '}
               <Text style={[styles.text, styles.textUnderline]}>
                 github.com/Gladkovskiy
               </Text>
@@ -39,14 +46,14 @@ const InfoApp: FC = () => {
           <TouchableOpacity
             onPress={() => createLink('https://openweathermap.org/')}>
             <Text style={styles.text}>
-              Данные:{'  '}
+              {translate('data')}:{'  '}
               <Text style={[styles.text, styles.textUnderline]}>
                 openweathermap.org
               </Text>
             </Text>
           </TouchableOpacity>
 
-          <Text style={styles.text}>Версия: 1.0.0</Text>
+          <Text style={styles.text}>{translate('version')}: 1.0.0</Text>
         </View>
         <TouchableOpacity
           style={styles.close}

@@ -1,6 +1,5 @@
 import Geolocation from '@react-native-community/geolocation'
 import {ThemeProvider} from '@rneui/themed'
-
 import React, {useContext, useEffect} from 'react'
 import {StatusBar, useColorScheme} from 'react-native'
 import {PERMISSIONS, request} from 'react-native-permissions'
@@ -10,6 +9,7 @@ import AppRouter from './src/components/AppRouter'
 import {GlobalContext} from './src/components/GlobalContextProvider'
 import {theme} from './src/style/theme'
 import SplashScreen from 'react-native-splash-screen'
+import './src/languages/IMLocalize'
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark'

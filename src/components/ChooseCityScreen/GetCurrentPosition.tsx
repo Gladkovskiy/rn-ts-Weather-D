@@ -1,11 +1,13 @@
+import Geolocation from '@react-native-community/geolocation'
 import {useNavigation} from '@react-navigation/native'
 import {Button, Dialog, Icon, makeStyles, Text, useTheme} from '@rneui/themed'
-import React, {FC, useState, useContext} from 'react'
+import React, {FC, useContext, useState} from 'react'
+import {useTranslation} from 'react-i18next'
 import {TouchableOpacity, View} from 'react-native'
+import {Screens, searchScreenKeys} from '../../languages/types'
 import {NavigationProps} from '../../types/reactNavigation'
-import {GlobalContext} from '../GlobalContextProvider'
-import Geolocation from '@react-native-community/geolocation'
 import {ROUTES} from '../../types/routes'
+import {GlobalContext} from '../GlobalContextProvider'
 
 const GetCurrentPosition: FC = () => {
   const styles = useStyle()
@@ -20,6 +22,9 @@ const GetCurrentPosition: FC = () => {
   const [loadingPosition, setLoadingPosition] = useState(false)
 
   const {navigate} = useNavigation<NavigationProps>()
+
+  const {t: translate} = useTranslation<Screens>('searchScreen')
+  const t = translate<searchScreenKeys>
 
   const getPosition = () => {
     setLoadingPosition(true)
@@ -51,11 +56,7 @@ const GetCurrentPosition: FC = () => {
     <>
       <Button
         onPress={getPosition}
-        title={
-          locationPermission
-            ? 'Погода по местоположению'
-            : 'Нет разрешения для определения местоположения'
-        }
+        title={locationPermission ? t('weatherByLocation') : t('noPermission')}
         disabled={!locationPermission}
         loading={loadingPosition}
       />

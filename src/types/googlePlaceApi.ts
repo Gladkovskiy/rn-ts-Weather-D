@@ -21,3 +21,9 @@ export interface ICandidat {
 export interface IGeocoding {
   candidates: ICandidat[]
 }
+
+export interface IGetCityName {
+  results: {
+    formatted_address: string
+  }[]
+}

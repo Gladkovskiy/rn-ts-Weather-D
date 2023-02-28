@@ -2,13 +2,17 @@ import {$weatherHost, WeatherPath} from '.'
 import {ICurrentWeather, IForecast5Days} from '../../types/weatherTypes'
 import {ILocation} from '../../types/googlePlaceApi'
 
-export const getCurrentWeather = async ({lat, lng}: ILocation) => {
+export const getCurrentWeather = async (
+  {lat, lng}: ILocation,
+  lang: string,
+) => {
   const {data} = await $weatherHost.get<ICurrentWeather>(
     WeatherPath.CURRENT_WEATHER,
     {
       params: {
         lat,
         lon: lng,
+        lang,
       },
     },
   )
