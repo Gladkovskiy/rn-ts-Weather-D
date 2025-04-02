@@ -45,6 +45,20 @@ export interface IForecast5Days {
   list: IForecast3Hours[]
 }
 
+export interface ILang {
+  ru?: string
+  en?: string
+}
+
+export interface IGeocoding {
+  name: string
+  local_names?: ILang
+  lat: number
+  lon: number
+  country: string
+  state: string
+}
+
 //data for elments
 export interface IElementsForecast3Hour {
   dt: string

@@ -27,6 +27,7 @@ export interface ISearchScreen {
   placeholderSearchInput: string
   screenTitle: string
   locationError: string
+  search: string
 }
 
 export interface IForecastScreen {

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="backgroundColor">#A2EB00</color>
+    <color name="backgroundNavigationColor">#a4d625</color>
+    <color name="backgroundStatusBarColor">#14CE00</color>
+</resources>

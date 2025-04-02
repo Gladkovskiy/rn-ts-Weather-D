@@ -6,6 +6,7 @@ const translation: ISearchScreen = {
   placeholderSearchInput: 'Название города',
   locationError: 'Включите определение локации',
   noPermission: 'Нет разрешения для определения местоположения',
+  search: 'Поиск',
 }
 
 export default translation

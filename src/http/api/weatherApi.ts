@@ -1,5 +1,9 @@
-import {$weatherHost, WeatherPath} from '.'
-import {ICurrentWeather, IForecast5Days} from '../../types/weatherTypes'
+import {$weatherGeocoding, $weatherHost, WeatherPath} from '.'
+import {
+  ICurrentWeather,
+  IForecast5Days,
+  IGeocoding,
+} from '../../types/weatherTypes'
 import {ILocation} from '../../types/googlePlaceApi'
 
 export const getCurrentWeather = async (
@@ -31,4 +35,14 @@ export const getForecast = async ({lat, lng}: ILocation) => {
   })
 
   return list
+}
+
+export const getCity = async (cityName: string) => {
+  const {data} = await $weatherGeocoding.get<IGeocoding[]>('', {
+    params: {
+      q: cityName,
+    },
+  })
+
+  return data
 }

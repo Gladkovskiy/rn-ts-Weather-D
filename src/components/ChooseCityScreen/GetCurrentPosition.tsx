@@ -8,6 +8,7 @@ import {Screens, searchScreenKeys} from '../../languages/types'
 import {NavigationProps} from '../../types/reactNavigation'
 import {ROUTES} from '../../types/routes'
 import {GlobalContext} from '../GlobalContextProvider'
+import {getFontSize} from '../../utils/fontSize'
 
 const GetCurrentPosition: FC = () => {
   const styles = useStyle()
@@ -32,7 +33,7 @@ const GetCurrentPosition: FC = () => {
     Geolocation.getCurrentPosition(
       ({coords: {latitude, longitude}}) => {
         setCoordinates({lat: latitude, lng: longitude})
-        setCityName('')
+        setCityName({ru: '', en: ''})
         setLoadingPosition(false)
         navigate(ROUTES.MAIN)
       },
@@ -54,12 +55,16 @@ const GetCurrentPosition: FC = () => {
 
   return (
     <>
-      <Button
-        onPress={getPosition}
-        title={locationPermission ? t('weatherByLocation') : t('noPermission')}
-        disabled={!locationPermission}
-        loading={loadingPosition}
-      />
+      <View style={styles.container}>
+        <Button
+          onPress={getPosition}
+          title={
+            locationPermission ? t('weatherByLocation') : t('noPermission')
+          }
+          disabled={!locationPermission}
+          loading={loadingPosition}
+        />
+      </View>
 
       <Dialog
         isVisible={error.visible}
@@ -70,11 +75,11 @@ const GetCurrentPosition: FC = () => {
             name="warning"
             type="antdesign"
             color={colors.error}
-            size={30}
+            size={getFontSize(30)}
             style={styles.icon}
           />
 
-          <Text h4>{error.message}</Text>
+          <Text style={styles.errorText}>{error.message}</Text>
         </View>
         <TouchableOpacity
           style={styles.close}
@@ -89,21 +94,30 @@ const GetCurrentPosition: FC = () => {
 export default GetCurrentPosition
 
 const useStyle = makeStyles(theme => ({
+  container: {
+    margin: 10,
+    padding: 10,
+  },
   dialog: {
     backgroundColor: theme.colors.background,
+    width: '80%',
   },
   errorContainer: {
     backgroundColor: theme.colors.background,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
   },
   close: {
     position: 'absolute',
-    top: '0%',
+    top: '5%',
     left: '105%',
   },
   icon: {
     marginRight: 10,
+  },
+  errorText: {
+    fontSize: getFontSize(16),
+    fontWeight: 'bold',
+    color: theme.colors.white,
   },
 }))

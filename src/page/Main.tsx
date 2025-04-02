@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native'
 import {Button, makeStyles} from '@rneui/themed'
-import React, {useContext} from 'react'
+import React, {useContext, useEffect} from 'react'
 import {useTranslation} from 'react-i18next'
 import {SafeAreaView} from 'react-native-safe-area-context'
 import Error from '../components/Error'
@@ -8,10 +8,12 @@ import {GlobalContext} from '../components/GlobalContextProvider'
 import InfoApp from '../components/InfoApp'
 import Loading from '../components/Loading'
 import CurrentWeather from '../components/MainScreen/CurrentWeather'
-import {useCurrentWeather} from '../http/query/useWeather'
+import {useRefreshOnFocus} from '../hooks/useRefreshOnFocus'
+import {useCurrentWeather, useForecast} from '../http/query/useWeather'
 import {mainScreenKeys, Screens} from '../languages/types'
 import {NavigationProps} from '../types/reactNavigation'
 import {ROUTES} from '../types/routes'
+import SplashScreen from 'react-native-splash-screen'
 
 const Main = () => {
   const {
@@ -19,22 +21,43 @@ const Main = () => {
     i18n: {language},
   } = useTranslation<Screens>('mainScreen')
   const translate = t<mainScreenKeys>
-
   const styles = useStyle()
+  const {navigate} = useNavigation<NavigationProps>()
 
   const {coordinates} = useContext(GlobalContext)
-  const {data, isSuccess, isFetching, isError} = useCurrentWeather(
-    coordinates,
-    language,
-  )
+  const currentWeather = useCurrentWeather(coordinates, language)
+  const forecastFiveDays = useForecast(coordinates)
 
-  const {navigate} = useNavigation<NavigationProps>()
+  useEffect(() => {
+    if (
+      (currentWeather.isSuccess && forecastFiveDays.isSuccess) ||
+      (currentWeather.isError && forecastFiveDays.isError)
+    )
+      SplashScreen.hide()
+  }, [
+    currentWeather.isSuccess,
+    currentWeather.isError,
+    forecastFiveDays.isSuccess,
+    forecastFiveDays.isError,
+  ])
+
+  useRefreshOnFocus(currentWeather.refetch)
+  useRefreshOnFocus(forecastFiveDays.refetch)
+
+  const refetchQueries = () => {
+    currentWeather.refetch()
+    forecastFiveDays.refetch()
+  }
 
   return (
     <SafeAreaView style={styles.container}>
-      {isSuccess ? (
+      {currentWeather.isSuccess && forecastFiveDays.isSuccess ? (
         <>
-          <CurrentWeather data={data} isLoading={isFetching} />
+          <CurrentWeather
+            currentWeather={currentWeather.data}
+            forecastOneDay={forecastFiveDays.data[0]}
+            isLoading={currentWeather.isFetching}
+          />
 
           <InfoApp />
 
@@ -45,10 +68,10 @@ const Main = () => {
             }}
           />
         </>
-      ) : !isError ? (
+      ) : !currentWeather.isError && !forecastFiveDays.isError ? (
         <Loading />
       ) : (
-        <Error isLoading={isFetching} />
+        <Error refetchFn={refetchQueries} />
       )}
     </SafeAreaView>
   )

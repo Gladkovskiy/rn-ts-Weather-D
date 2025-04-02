@@ -2,7 +2,8 @@ import {makeStyles} from '@rneui/themed'
 import React from 'react'
 import {SafeAreaView} from 'react-native-safe-area-context'
 import GetCurrentPosition from '../components/ChooseCityScreen/GetCurrentPosition'
-import SearchInput from '../components/ChooseCityScreen/SearchInput'
+
+import Search from '../components/ChooseCityScreen/Search'
 
 const ChooseCity = () => {
   const styles = useStyle()
@@ -10,8 +11,7 @@ const ChooseCity = () => {
   return (
     <SafeAreaView style={styles.container}>
       <GetCurrentPosition />
-
-      <SearchInput />
+      <Search />
     </SafeAreaView>
   )
 }

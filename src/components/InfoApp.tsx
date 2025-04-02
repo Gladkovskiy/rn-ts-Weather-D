@@ -53,7 +53,7 @@ const InfoApp: FC = () => {
             </Text>
           </TouchableOpacity>
 
-          <Text style={styles.text}>{translate('version')}: 1.0.0</Text>
+          <Text style={styles.text}>{translate('version')}: 1.0.1</Text>
         </View>
         <TouchableOpacity
           style={styles.close}
@@ -69,8 +69,9 @@ export default InfoApp
 
 const useStyle = makeStyles(({colors}) => ({
   iconPosition: {
-    alignItems: 'flex-end',
-    margin: 4,
+    position: 'absolute',
+    right: '1%',
+    top: '1%',
   },
   dialog: {
     backgroundColor: colors.background,
@@ -78,12 +79,12 @@ const useStyle = makeStyles(({colors}) => ({
   },
   errorContainer: {
     backgroundColor: colors.background,
-    padding: 10,
+    padding: 15,
   },
   close: {
     position: 'absolute',
-    top: '0%',
-    left: '105%',
+    top: '7%',
+    left: '102%',
   },
   text: {
     color: colors.white,

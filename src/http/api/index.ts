@@ -15,6 +15,14 @@ export enum WeatherPath {
   FORECAST_WEATHER = '/forecast',
 }
 
+export const $weatherGeocoding = axios.create({
+  baseURL: 'https://api.openweathermap.org/geo/1.0/direct',
+  params: {
+    appid: WEATHER_API_KEY,
+    limit: 5,
+  },
+})
+
 export const $geocodingHost = axios.create({
   baseURL: 'https://maps.googleapis.com/maps/api/place',
   params: {

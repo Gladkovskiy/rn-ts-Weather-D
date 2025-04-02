@@ -1,5 +1,5 @@
 import {makeStyles} from '@rneui/themed'
-import React, {useState, useContext} from 'react'
+import React, {useContext, useState} from 'react'
 import {SafeAreaView} from 'react-native-safe-area-context'
 import TabItem from '../components/ForecasrFiveDaysScreen/TabItem'
 import TabViewWeather from '../components/ForecasrFiveDaysScreen/TabViewWeather'

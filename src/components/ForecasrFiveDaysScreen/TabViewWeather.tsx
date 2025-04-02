@@ -24,7 +24,7 @@ const TabViewWeather: FC<ITabViewWeather> = ({
       animationType="spring">
       {forecast.map(item => (
         <TabView.Item key={item.date} style={styles.tabContainer}>
-          <ForecastListItem_1 {...item} />
+          <ForecastListItem_1 data={item} fontSize={20} />
         </TabView.Item>
       ))}
     </TabView>

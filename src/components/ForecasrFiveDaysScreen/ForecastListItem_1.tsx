@@ -8,6 +8,7 @@ import {arrImage as arrImageParams} from '../../assets/lottie/weather_params/ind
 import {forecastScreenKeys, Screens} from '../../languages/types'
 import {IElementsForecast1Day} from '../../types/weatherTypes'
 import {getImage} from '../../utils/getDynamicImage'
+import {getFontSize} from '../../utils/fontSize'
 
 const arrParamsDescription = [
   'time',
@@ -18,8 +19,16 @@ const arrParamsDescription = [
   'weather',
 ]
 
-const ForecastListItem_1: FC<IElementsForecast1Day> = ({list}) => {
-  const styles = useStyle()
+interface IForecastLitsItem_1 {
+  data: IElementsForecast1Day
+  fontSize: number
+}
+
+const ForecastListItem_1: FC<IForecastLitsItem_1> = ({
+  data: {list},
+  fontSize,
+}) => {
+  const styles = useStyle(fontSize)
 
   const {t: t1} = useTranslation<Screens>('forecastScreen')
   const t = t1<forecastScreenKeys>
@@ -50,7 +59,7 @@ const ForecastListItem_1: FC<IElementsForecast1Day> = ({list}) => {
             index % 2 === 1 ? styles.secondBg : null,
           ]}>
           <View style={styles.flex}>
-            <Text h3>{dt}</Text>
+            <Text style={styles.text}>{dt}</Text>
           </View>
 
           <View style={styles.flex}>
@@ -63,21 +72,21 @@ const ForecastListItem_1: FC<IElementsForecast1Day> = ({list}) => {
           </View>
 
           <View style={styles.flex}>
-            <Text h3>{Math.round(temp)} &deg;</Text>
+            <Text style={styles.text}>{Math.round(temp)} &deg;</Text>
           </View>
 
           <View style={styles.flex}>
-            <Text h3>
+            <Text style={styles.text}>
               {Math.round(windSpeed)} {t('m_s')}
             </Text>
           </View>
 
           <View style={styles.flex}>
-            <Text h3>{humidity} %</Text>
+            <Text style={styles.text}>{humidity} %</Text>
           </View>
 
           <View style={styles.flex}>
-            <Text h3>{Math.round(pop * 100)} %</Text>
+            <Text style={styles.text}>{Math.round(pop * 100)} %</Text>
           </View>
         </View>
       ))}
@@ -87,7 +96,7 @@ const ForecastListItem_1: FC<IElementsForecast1Day> = ({list}) => {
 
 export default ForecastListItem_1
 
-const useStyle = makeStyles(({colors}) => ({
+const useStyle = makeStyles(({colors}, fontSize: number) => ({
   container: {
     flex: 1,
   },
@@ -98,15 +107,14 @@ const useStyle = makeStyles(({colors}) => ({
   },
   paramsContainer: {
     flexDirection: 'row',
-    borderBottomWidth: 0.8,
     borderColor: colors.secondary,
     height: '8%',
   },
   lottie: {
-    width: 50,
+    width: (50 * fontSize) / 20,
   },
   lottieParams: {
-    width: 40,
+    width: (40 * fontSize) / 20,
   },
   flex: {
     flex: 1,
@@ -117,5 +125,10 @@ const useStyle = makeStyles(({colors}) => ({
   },
   secondBg: {
     backgroundColor: colors.secondary,
+  },
+  text: {
+    color: colors.white,
+    fontSize: getFontSize(fontSize),
+    fontWeight: 'bold',
   },
 }))
